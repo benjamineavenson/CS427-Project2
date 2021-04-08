@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-unsigned int modExp(long long int, long long int, unsigned int);
+unsigned long long int modExp(long long int, long long int, unsigned int);
 unsigned int decrypt_block(unsigned long int, unsigned long int, unsigned long int, unsigned long int);
 
 void decryption(FILE* key, FILE* ctext, FILE* dtext){
 
-  printf("%u\n", modExp(6474193463, 7942410450, 9670924883));
+  printf("%llu\n", modExp(6474193463, 7942410450, 123456789));
   exit(0);
 
   char* key_buffer = NULL;
