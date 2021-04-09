@@ -58,10 +58,6 @@ void encryption(FILE* key, FILE* ptext, FILE* ctext){
     encrypt_block(block, p, g, e, ctext);
     if(status == 0)break; //break out of the loops if there is no more to be read
   }
-  //at this point we have some number of bits that need to be padded...
-  //ive got no clue which direction to pad in, so for now i'll do nothing
-  printf("buffer: %lx\n", buffer);
-  printf("stored: %i\n", stored);
   
   
   fclose(ptext);
