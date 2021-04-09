@@ -59,18 +59,13 @@ void decryption(FILE* key, FILE* ctext, FILE* dtext){
       buffer = buffer | decrypted_bits; //put the bits into the buffer
       stored += 31;
     }
-      printf("%lx\n", buffer);
       writing_byte = buffer >> (sizeof(unsigned long int)*8 - 8); //get the next byte to write
       buffer = buffer << 8;  //shift the buffer up 8
       stored -= 8;
 
       fprintf(dtext, "%c", writing_byte);
-      printf("%c\n", writing_byte);
+      printf("%c", writing_byte);
   }
-  //at this point we (might?) have some bits that need to be output still...
-  //guess we'll find out what to do with those after the test run...
-  //for now i'll just print the buffer.
-  printf("%lx\n", buffer);
   
   fclose(ctext);
   fclose(dtext);
@@ -81,6 +76,5 @@ void decryption(FILE* key, FILE* ctext, FILE* dtext){
 unsigned int decrypt_block(unsigned long int c1, unsigned long int c2, unsigned long int p, unsigned long int d){
   unsigned int m;
   m = ((modExp((long long int)c1, (long long int)((p - 1) - d), (unsigned int)p))*(c2%p))%p;
-  printf("%x\n", m);
   return m;
 }

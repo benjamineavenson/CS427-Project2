@@ -17,7 +17,7 @@ _Bool millerRabin(unsigned int n, int s){  //we are given a number to check and 
   int k = 0;
   int q = n-1;
 
-  while(!q&10){  //generate k and q for miller-rabin algo
+  while(!(q&1)){  //generate k and q for miller-rabin algo
     k++;
     q = q >> 1;
   }
