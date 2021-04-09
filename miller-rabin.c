@@ -9,20 +9,20 @@
 #define PRIME 1
 #define COMPOSITE 0
 
-unsigned int modExp(long long int, long long int, unsigned int);
-int millerRabinCheck(unsigned int, long long int, long long int, long long int);
+unsigned long long int modExp(unsigned long long int, unsigned long long int, unsigned long long int);
+int millerRabinCheck(unsigned long long int, unsigned long long int, unsigned long long int, unsigned long long int);
 
-_Bool millerRabin(unsigned int n, int s){  //we are given a number to check and the number of random checks to make
+_Bool millerRabin(unsigned long long int n, int s){  //we are given a number to check and the number of random checks to make
 
-  int k = 0;
-  int q = n-1;
+  unsigned long long int k = 0;
+  unsigned long long int q = n-1;
 
   while(!(q&1)){  //generate k and q for miller-rabin algo
     k++;
     q = q >> 1;
   }
 
-  long long int a;
+  unsigned long long int a;
   for(int i = 0; i != s; i++){  //make s miller-rabin checks
     a = (rand()%(n-2)) + 1;
     if(millerRabinCheck(n, k, q, a) == COMPOSITE){  //if it ever comes up composite, we know for certain that its composite
@@ -33,15 +33,18 @@ _Bool millerRabin(unsigned int n, int s){  //we are given a number to check and 
 } 
 
 
-int millerRabinCheck(unsigned int n, long long int k, long long int q, long long int a){ //miller rabin algorithm
-  if(modExp(a, q, n) == 1){
-    return PRIME;
-  }
-  for(int i = 0; i < k; i++){
-    if(modExp(a, pow(2, i)*q, n) == (n-1)){
-      return PRIME;
+int millerRabinCheck(unsigned long long int n, unsigned long long int k, unsigned long long int q, unsigned long long int a){ //miller rabin algorithm
+  unsigned long long int prev_x = modExp(a, q, n);
+  unsigned long long int curr_x;
+  for(int i = 1; i <= k; i++){
+    curr_x = modExp(prev_x, 2, n);
+    if(prev_x != 1 && prev_x != n-1 && curr_x == 1){
+      return COMPOSITE;
     }
+    prev_x = curr_x;
   }
-  return COMPOSITE;
+  if(curr_x != 1) return COMPOSITE;
+  
+  return PRIME;
 }
   

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 
-unsigned long long int modExp(long long int a, long long int b, unsigned int n){
+unsigned long long int modExp(unsigned long long int a, unsigned long long int b, unsigned long long int n){
   unsigned long long int val = 1;
   unsigned int bits = (unsigned int)log2(b)+1;
   for(int i = bits-1; i >= 0; i--){
