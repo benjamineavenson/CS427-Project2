@@ -12,6 +12,10 @@ int main(int argc, char** argv){
   
   enum Mode{noSelection, genkey, encrypt, decrypt};
 
+  FILE* key = NULL;
+  FILE* input = NULL;
+  FILE* output = NULL;
+
   enum Mode selectedMode = noSelection;
   int i;
   for(i = 1; i < argc; i++){  //parse the command line args
@@ -33,6 +37,24 @@ int main(int argc, char** argv){
         exit(-1);
       }
       selectedMode = decrypt;
+    } else if(strcmp(argv[i], "-in") == 0) {
+      input = fopen(argv[++i], "r");
+      if(input == NULL){
+        printf("Failed to open file %s. Terminating...\n", argv[i]);
+        exit(-1);
+      }
+    } else if(strcmp(argv[i], "-out") == 0) {
+      output = fopen(argv[++i], "w+");
+      if(output == NULL){
+        printf("Failed to open file %s. Terminating...\n", argv[i]);
+        exit(-1);
+      }
+    } else if(strcmp(argv[i], "-k") == 0) {
+      key = fopen(argv[++i], "r");
+      if(key == NULL){
+        printf("Failed to open file %s. Terminating...\n", argv[i]);
+        exit(-1);
+      }
     } else {
       printf("Flag not recognized: %s\nTerminating...\n", argv[i]);
       exit(-1);
@@ -41,9 +63,6 @@ int main(int argc, char** argv){
 
   FILE* pubkey = NULL;
   FILE* prikey = NULL;
-  FILE* plaintext = NULL;
-  FILE* ciphertext = NULL;
-  FILE* decipheredtext = NULL;
 
   switch(selectedMode){
     case genkey:
@@ -60,40 +79,18 @@ int main(int argc, char** argv){
       keygen(pubkey, prikey);
       break;
     case encrypt:
-      pubkey = fopen("pubkey.txt", "r");
-      plaintext = fopen("ptext.txt", "r");
-      ciphertext = fopen("ctext.txt", "w+");
-      if(pubkey == NULL){
-        printf("Failed to open pubkey.txt. Terminating...\n");
+      if(key == NULL || input == NULL || output == NULL){
+        printf("One or more files weren't specified. Terminating...\n");
         exit(-1);
       }
-      if(plaintext == NULL){
-        printf("Failed to open ptext.txt. Terminating...\n");
-        exit(-1);
-      }
-      if(ciphertext == NULL){
-        printf("Failed to open/create ctext.txt. Terminating...\n");
-        exit(-1);
-      }
-      encryption(pubkey, plaintext, ciphertext);
+      encryption(key, input, output);
       break;
     case decrypt:
-      prikey = fopen("prikey.txt", "r");
-      ciphertext = fopen("ctext.txt", "r");
-      decipheredtext = fopen("dtext.txt", "w+");
-      if(prikey == NULL){
-        printf("Failed to open prikey.txt. Terminating...\n");
+      if(key == NULL || input == NULL || output == NULL){
+        printf("One or more files weren't specified. Terminating...\n");
         exit(-1);
       }
-      if(ciphertext == NULL){
-        printf("Failed to open ctext.txt. Terminating...\n");
-        exit(-1);
-      }
-      if(decipheredtext == NULL){
-        printf("Failed to open/create dtext.txt. Terminating...\n");
-        exit(-1);
-      }
-      decryption(prikey, ciphertext, decipheredtext);
+      decryption(key, input, output);
       break;
     default:
       printf("Mode not specified. Terminating...\n");
