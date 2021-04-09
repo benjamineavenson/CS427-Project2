@@ -16,16 +16,13 @@ void keygen(FILE* pub, FILE* pri){
 
   while(1){
     while(1){
-      q = rand(); //on my machine this generates a number between 0 and 2^31, so a 31 bit number
-      printf("checking %u\n", q);
+      q = rand(); //on my machine this generates a number between 0 and 2^31, so a 31 bit number...
+      q = q | 0x40000000;  //lets set the 31st bit, just to make sure its a 31 bit number so our generated prime is 32-bit
       if(q%12 == 5 && millerRabin(q, 3)) break;  //make sure our random number is prime and congruent to 5 mod 12
     }
-    printf("found an acceptable q\n");
-    p = (2*q) + 1;
+    p = (q << 1) + 1;
     if(millerRabin(p, 3)) break; //we calculate p from q and make sure its prime.
   }
-
-  printf("found an acceptable p\n");
 
   long long int d = rand(); //choose a random number greater than 0 and less than p
   d = d%(p-1);

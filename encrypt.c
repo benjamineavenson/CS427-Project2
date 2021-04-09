@@ -51,15 +51,18 @@ void encryption(FILE* key, FILE* ptext, FILE* ctext){
       buffer = buffer | read_byte; //and place it in the buffer
       stored += 8;
     }
-    if(status == 0)break;//break out of the loops if there is no more to be read
     block = buffer >> (sizeof(unsigned long int)*8 - 31); //get the next 31 bits from the buffer
     buffer = buffer << 31;  //shift the buffer up 31
     stored -= 31;
 
     encrypt_block(block, p, g, e, ctext);
+    if(status == 0)break; //break out of the loops if there is no more to be read
   }
   //at this point we have some number of bits that need to be padded...
   //ive got no clue which direction to pad in, so for now i'll do nothing
+  printf("buffer: %lx\n", buffer);
+  printf("stored: %i\n", stored);
+  
   
   fclose(ptext);
   fclose(ctext);
@@ -74,9 +77,7 @@ void encrypt_block(unsigned int block, unsigned long int p, unsigned long int g,
 
   long long int k = rand()%p;
 
-  printf("calculating c1...\n");
   c1 = modExp((long long int)g, k, (unsigned int)p);
-  printf("calculating c2...\n");
   c2 = ((modExp((long long int)e, k, (unsigned int)p) * (block%p)) % p);
 
   printf("%u %u\n", c1, c2);

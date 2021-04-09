@@ -17,13 +17,10 @@ _Bool millerRabin(unsigned int n, int s){  //we are given a number to check and 
   int k = 0;
   int q = n-1;
 
-  while(q%2 == 0){  //generate k and q for miller-rabin algo
+  while(!q&10){  //generate k and q for miller-rabin algo
     k++;
-    q = q/2;
+    q = q >> 1;
   }
-
-  time_t t;
-  srand((unsigned int)time(&t));
 
   long long int a;
   for(int i = 0; i != s; i++){  //make s miller-rabin checks

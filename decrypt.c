@@ -8,9 +8,6 @@ unsigned int decrypt_block(unsigned long int, unsigned long int, unsigned long i
 
 void decryption(FILE* key, FILE* ctext, FILE* dtext){
 
-  printf("%llu\n", modExp(6474193463, 7942410450, 123456789));
-  exit(0);
-
   char* key_buffer = NULL;
   size_t n = 0;
   getline(&key_buffer, &n, key); //read the key
